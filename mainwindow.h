@@ -7,6 +7,7 @@
 #include <QMediaPlayer>
 #include <QVideoWidget>
 #include <QAudioOutput>
+#include <QEventLoop>
 
 #include "ElaWidget.h"
 
@@ -30,6 +31,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    QEventLoop loop;
     QMediaPlayer* m_player = nullptr;
     QAudioOutput* m_audioOutput = nullptr;
     QVideoWidget* m_videoOutput = nullptr;

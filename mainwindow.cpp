@@ -35,7 +35,7 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
-    QEventLoop loop;
+
 void MainWindow::on_pushButton_clicked()
 {
     QVideoSink* videoSink = new QVideoSink(this);
