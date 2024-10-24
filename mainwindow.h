@@ -8,14 +8,14 @@
 #include <QVideoWidget>
 #include <QAudioOutput>
 
+#include "ElaWidget.h"
+
 
 QT_BEGIN_NAMESPACE
-namespace Ui {
-class MainWindow;
-}
+namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
-class MainWindow : public QMainWindow
+class MainWindow : public ElaWidget
 {
     Q_OBJECT
 
@@ -32,5 +32,6 @@ private:
     Ui::MainWindow *ui;
     QMediaPlayer* m_player = nullptr;
     QAudioOutput* m_audioOutput = nullptr;
+    QVideoWidget* m_videoOutput = nullptr;
 };
 #endif // MAINWINDOW_H

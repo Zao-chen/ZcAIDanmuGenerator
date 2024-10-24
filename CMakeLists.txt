@@ -18,9 +18,16 @@ set(PROJECT_SOURCES
         mainwindow.ui
 )
 
-add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})
+add_executable(${PROJECT_NAME} ${PROJECT_SOURCES}
+    include/ElaWidgetTools.qrc
+    res.qrc)
 
+include_directories(
+    include
+)
 
-target_link_libraries(${PROJECT_NAME} PRIVATE Qt6::Widgets Qt6::Multimedia Qt6::MultimediaWidgets Qt6::Network)
+target_link_libraries(${PROJECT_NAME} PRIVATE Qt6::Widgets Qt6::Multimedia Qt6::MultimediaWidgets Qt6::Network
+    ${CMAKE_CURRENT_SOURCE_DIR}/lib/elawidgettools.lib
+)
 
 

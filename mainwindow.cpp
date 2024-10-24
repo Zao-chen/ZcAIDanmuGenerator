@@ -17,15 +17,18 @@
 #include <QVideoSink>
 #include <QVideoFrame>
 
+#include "ElaWidget.h"
+
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
+    : ElaWidget(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    this->setWindowTitle("ZcAIDanmuGenerator");
     m_player = new QMediaPlayer(this);
     m_audioOutput = new QAudioOutput(this);
-
+    ui->tabWidget->setTabsClosable(false);
 }
 
 MainWindow::~MainWindow()
@@ -57,11 +60,12 @@ void MainWindow::on_pushButton_clicked()
             if (!frameCaptured && frame.isValid()) {
                 frameCaptured = true; // 第一次捕获后设置为 true
                 QImage image = frame.toImage();
+                ui->label->setPixmap(QPixmap::fromImage(image));
                 if (!image.isNull()) {
                     // 保存图像为 jpg
-                    image.save("temp_img/sc" + QString::number(i) + ".jpg", "JPG");
+                    image.save(qApp->applicationDirPath()+"/temp/sc" + QString::number(i) + ".jpg", "JPG");
                     qDebug() << "Frame captured and saved.";
-                    Urlpost("temp_img/sc" + QString::number(i) + ".jpg");
+                    Urlpost(qApp->applicationDirPath()+"/temp/sc" + QString::number(i) + ".jpg");
                 } else {
                     qDebug() << "Frame is not valid or conversion failed.";
                 }
@@ -98,7 +102,7 @@ void MainWindow::Urlpost(QString fileName)
     QJsonArray json_content;
     QJsonObject json_content1;
     json_content1.insert("type","text");
-    json_content1.insert("text","这是一个视频的截图，请你作为观众对这个画面发送弹幕进行吐槽(正能量吐槽），需要你给出7个吐槽的短句，你必须按照这个格式回复：<吐槽1>;<吐槽2>;....");
+    json_content1.insert("text",ui->lineEdit_2->text());
     json_content.append(json_content1);
     QJsonObject json_content2;
     json_content2.insert("type","image_url");
@@ -169,11 +173,11 @@ void MainWindow::requestFinished(QNetworkReply* reply) {
     for(int i=0;i!=content_list.size();i++)
     {
         x++;
-        if (x>=4) x=0;
+        if (x>=6) x=0;
         ui->plainTextEdit_2->appendPlainText("Dialogue:0,"+
                                              secondsToTimeString(ii+i-1).replace(".",":")
                                              +","+
-                                             secondsToTimeString(ii+5+i-1).replace(".",":")
+                                             secondsToTimeString(ii+10+i).replace(".",":")
                                              +",R2L,,20,20,2,,{\\move(585,"+
                                              QString::number(x*20)
                                              +",-25,"+
