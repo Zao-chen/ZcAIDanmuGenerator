@@ -12,10 +12,10 @@
 #include <QBuffer>
 
 #include <QTimer>
-
 #include <QFileDialog>
 #include <QVideoSink>
 #include <QVideoFrame>
+#include <QStandardItemModel>
 
 #include "ElaWidget.h"
 
@@ -28,7 +28,13 @@ MainWindow::MainWindow(QWidget *parent)
     this->setWindowTitle("ZcAIDanmuGenerator");
     m_player = new QMediaPlayer(this);
     m_audioOutput = new QAudioOutput(this);
-    ui->tabWidget->setTabsClosable(false);
+
+    QStandardItemModel* model = new QStandardItemModel(ui->treeView_up);
+    model->appendRow(new QStandardItem(QStringLiteral("主页")));
+    model->appendRow(new QStandardItem(QStringLiteral("设置")));
+    ui->treeView_up->setModel(model);
+    QModelIndex modelindex = ui->treeView_up->model()->index(0, 0);
+    ui->treeView_up->setCurrentIndex(modelindex);
 }
 
 MainWindow::~MainWindow()
@@ -60,7 +66,7 @@ void MainWindow::on_pushButton_clicked()
             if (!frameCaptured && frame.isValid()) {
                 frameCaptured = true; // 第一次捕获后设置为 true
                 QImage image = frame.toImage();
-                ui->label->setPixmap(QPixmap::fromImage(image));
+                ui->label_img->setPixmap(QPixmap::fromImage(image));
                 if (!image.isNull()) {
                     // 保存图像为 jpg
                     image.save(qApp->applicationDirPath()+"/temp/sc" + QString::number(i) + ".jpg", "JPG");
@@ -187,3 +193,9 @@ void MainWindow::requestFinished(QNetworkReply* reply) {
     }
     ii+=5;
 }
+
+void MainWindow::on_treeView_up_clicked(const QModelIndex &index)
+{
+    ui->stackedWidget->setCurrentIndex(index.row());
+}
+

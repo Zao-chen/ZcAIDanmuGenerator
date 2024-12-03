@@ -29,6 +29,8 @@ private slots:
     void Urlpost(QString fileName);
     void requestFinished(QNetworkReply* reply);
 
+    void on_treeView_up_clicked(const QModelIndex &index);
+
 private:
     Ui::MainWindow *ui;
     QEventLoop loop;
