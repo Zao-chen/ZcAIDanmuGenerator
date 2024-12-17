@@ -44,8 +44,8 @@ border:none;
      <property name="currentIndex">
       <number>0</number>
      </property>
-     <widget class="QWidget" name="page">
-      <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,10">
+     <widget class="QWidget" name="page_0">
+      <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,6">
        <item>
         <layout class="QVBoxLayout" name="verticalLayout_2">
          <item>
@@ -69,17 +69,23 @@ border:none;
            </property>
           </widget>
          </item>
-         <item>
-          <widget class="QLabel" name="label_4">
-           <property name="text">
-            <string>弹幕文件</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="ElaPlainTextEdit" name="plainTextEdit_2">
-           <property name="plainText">
-            <string>[Script Info]
+        </layout>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_img">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="page_1">
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <widget class="ElaPlainTextEdit" name="plainTextEdit_2">
+         <property name="plainText">
+          <string>[Script Info]
 Title: Zaochen
 Original Script: 
 ScriptType: v4.00+
@@ -96,15 +102,6 @@ Style: R2L,Microsoft YaHei UI,20,&amp;H66FFFFFF,&amp;H66FFFFFF,&amp;H66000000,&a
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_img">
-         <property name="text">
-          <string/>
          </property>
         </widget>
        </item>

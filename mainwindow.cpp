@@ -26,7 +26,8 @@ MainWindow::MainWindow(QWidget *parent)
     m_player = new QMediaPlayer(this);
     m_audioOutput = new QAudioOutput(this);
     QStandardItemModel* model = new QStandardItemModel(ui->treeView_up);
-    model->appendRow(new QStandardItem(QStringLiteral("主页")));
+    model->appendRow(new QStandardItem(QStringLiteral("生成")));
+    model->appendRow(new QStandardItem(QStringLiteral("导出")));
     model->appendRow(new QStandardItem(QStringLiteral("设置")));
     ui->treeView_up->setModel(model);
     QModelIndex modelindex = ui->treeView_up->model()->index(0, 0);
@@ -61,7 +62,7 @@ void MainWindow::on_pushButton_clicked()
             if (!frameCaptured && frame.isValid()) {
                 frameCaptured = true; //第一次捕获后设置为 true
                 QImage image = frame.toImage();
-                ui->label_img->setPixmap(QPixmap::fromImage(image));
+                ui->label_img->setPixmap(QPixmap::fromImage(image).scaled(ui->label_img->size(),Qt::KeepAspectRatio));
                 if (!image.isNull()) {
                     //保存图像为 jpg
                     image.save(qApp->applicationDirPath()+"/temp/sc" + QString::number(i) + ".jpg", "JPG");
