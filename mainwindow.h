@@ -28,8 +28,9 @@ private slots:
     void on_pushButton_clicked();
     void Urlpost(QString fileName);
     void requestFinished(QNetworkReply* reply);
-
     void on_treeView_up_clicked(const QModelIndex &index);
+    void on_lineEdit_apikey_textChanged(const QString &arg1);
+    void on_lineEdit_prompt_textChanged(const QString &arg1);
 
 private:
     Ui::MainWindow *ui;

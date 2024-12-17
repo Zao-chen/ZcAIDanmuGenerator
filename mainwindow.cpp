@@ -7,34 +7,34 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
-
 #include <QMessageBox>
 #include <QBuffer>
-
 #include <QTimer>
 #include <QFileDialog>
 #include <QVideoSink>
 #include <QVideoFrame>
 #include <QStandardItemModel>
-
-#include "ElaWidget.h"
-
+#include <QSettings>
 
 MainWindow::MainWindow(QWidget *parent)
     : ElaWidget(parent)
     , ui(new Ui::MainWindow)
 {
+    //界面初始化
     ui->setupUi(this);
     this->setWindowTitle("ZcAIDanmuGenerator");
     m_player = new QMediaPlayer(this);
     m_audioOutput = new QAudioOutput(this);
-
     QStandardItemModel* model = new QStandardItemModel(ui->treeView_up);
     model->appendRow(new QStandardItem(QStringLiteral("主页")));
     model->appendRow(new QStandardItem(QStringLiteral("设置")));
     ui->treeView_up->setModel(model);
     QModelIndex modelindex = ui->treeView_up->model()->index(0, 0);
     ui->treeView_up->setCurrentIndex(modelindex);
+    //读取配置文件
+    QSettings *settings = new QSettings(qApp->applicationDirPath()+"/Setting.ini",QSettings::IniFormat);
+    ui->lineEdit_apikey->setText(settings->value("/apikey").toString());
+    ui->lineEdit_prompt->setText(settings->value("/prompt").toString());
 }
 
 MainWindow::~MainWindow()
@@ -48,40 +48,33 @@ void MainWindow::on_pushButton_clicked()
     /*视频截图*/
     m_player->setAudioOutput(m_audioOutput);
     m_player->setVideoOutput(videoSink);
-    // 加载视频文件
+    //加载视频文件
     QString str = QFileDialog::getOpenFileName();
     m_player->setSource(QUrl(str));
     m_player->play();
     //循环五秒
     for (int i = 0; i <= m_player->duration(); i += 7000)
     {
-        m_player->setPosition(i);
-
-        // 使用局部事件循环等待帧捕获
-
-        bool frameCaptured = false;
-
-        // 连接视频帧捕获的信号
+        m_player->setPosition(i); //使用局部事件循环等待帧捕获
+        bool frameCaptured = false; //连接视频帧捕获的信号
         connect(videoSink, &QVideoSink::videoFrameChanged, this, [&](const QVideoFrame &frame) mutable {
             if (!frameCaptured && frame.isValid()) {
-                frameCaptured = true; // 第一次捕获后设置为 true
+                frameCaptured = true; //第一次捕获后设置为 true
                 QImage image = frame.toImage();
                 ui->label_img->setPixmap(QPixmap::fromImage(image));
                 if (!image.isNull()) {
-                    // 保存图像为 jpg
+                    //保存图像为 jpg
                     image.save(qApp->applicationDirPath()+"/temp/sc" + QString::number(i) + ".jpg", "JPG");
                     qDebug() << "Frame captured and saved.";
                     Urlpost(qApp->applicationDirPath()+"/temp/sc" + QString::number(i) + ".jpg");
                 } else {
                     qDebug() << "Frame is not valid or conversion failed.";
                 }
-
-                // 断开信号，停止等待
+                //断开信号，停止等待
                 disconnect(videoSink, &QVideoSink::videoFrameChanged, this, nullptr);
 
             }
         });
-
         // 开启局部事件循环，等待帧捕获完成
         loop.exec();
     }
@@ -98,7 +91,7 @@ void MainWindow::Urlpost(QString fileName)
     //头设置
     request.setUrl(QUrl("https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions"));
     request.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/json"));
-    request.setRawHeader("Authorization","Basic "+ui->lineEdit->text().toLatin1());
+    request.setRawHeader("Authorization","Basic "+ui->lineEdit_apikey->text().toLatin1());
     //data设置
     QJsonObject json_main;
     json_main.insert("model","qwen-vl-plus");
@@ -108,7 +101,7 @@ void MainWindow::Urlpost(QString fileName)
     QJsonArray json_content;
     QJsonObject json_content1;
     json_content1.insert("type","text");
-    json_content1.insert("text",ui->lineEdit_2->text());
+    json_content1.insert("text",ui->lineEdit_prompt->text());
     json_content.append(json_content1);
     QJsonObject json_content2;
     json_content2.insert("type","image_url");
@@ -197,5 +190,19 @@ void MainWindow::requestFinished(QNetworkReply* reply) {
 void MainWindow::on_treeView_up_clicked(const QModelIndex &index)
 {
     ui->stackedWidget->setCurrentIndex(index.row());
+}
+/*apikey保存*/
+void MainWindow::on_lineEdit_apikey_textChanged(const QString &arg1)
+{
+    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
+    settings->setValue("/apikey",arg1);
+    delete settings;
+}
+/*提示词保存*/
+void MainWindow::on_lineEdit_prompt_textChanged(const QString &arg1)
+{
+    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
+    settings->setValue("/prompt",arg1);
+    delete settings;
 }
 
