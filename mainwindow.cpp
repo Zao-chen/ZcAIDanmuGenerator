@@ -26,8 +26,7 @@ MainWindow::MainWindow(QWidget *parent)
     m_player = new QMediaPlayer(this);
     m_audioOutput = new QAudioOutput(this);
     QStandardItemModel* model = new QStandardItemModel(ui->treeView_up);
-    model->appendRow(new QStandardItem(QStringLiteral("生成")));
-    model->appendRow(new QStandardItem(QStringLiteral("导出")));
+    model->appendRow(new QStandardItem(QStringLiteral("主页")));
     model->appendRow(new QStandardItem(QStringLiteral("设置")));
     ui->treeView_up->setModel(model);
     QModelIndex modelindex = ui->treeView_up->model()->index(0, 0);
@@ -62,7 +61,7 @@ void MainWindow::on_pushButton_clicked()
             if (!frameCaptured && frame.isValid()) {
                 frameCaptured = true; //第一次捕获后设置为 true
                 QImage image = frame.toImage();
-                ui->label_img->setPixmap(QPixmap::fromImage(image).scaled(ui->label_img->size(),Qt::KeepAspectRatio));
+                ui->label_img->setPixmap(QPixmap::fromImage(image).scaled(ui->label_img->size()));
                 if (!image.isNull()) {
                     //保存图像为 jpg
                     image.save(qApp->applicationDirPath()+"/temp/sc" + QString::number(i) + ".jpg", "JPG");
@@ -168,10 +167,12 @@ void MainWindow::requestFinished(QNetworkReply* reply) {
     ui->plainTextEdit->setPlainText(content);
     loop.quit();  // 结束局部事件循环
 
-    QStringList content_list = content.split(";");
+    QStringList content_list = content.replace("||","|").split("|");
     int x=0;
     for(int i=0;i!=content_list.size();i++)
     {
+        if(!content_list[i].isEmpty())
+        {
         x++;
         if (x>=6) x=0;
         ui->plainTextEdit_2->appendPlainText("Dialogue:0,"+
@@ -184,6 +185,7 @@ void MainWindow::requestFinished(QNetworkReply* reply) {
                                              QString::number(x*20)
                                              +")}"+
                                              content_list[i].replace(".","。").replace("\n","").replace("<","").replace(">",""));
+        }
     }
     ii+=5;
 }
@@ -206,4 +208,3 @@ void MainWindow::on_lineEdit_prompt_textChanged(const QString &arg1)
     settings->setValue("/prompt",arg1);
     delete settings;
 }
-

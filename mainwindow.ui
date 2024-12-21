@@ -45,47 +45,67 @@ border:none;
       <number>0</number>
      </property>
      <widget class="QWidget" name="page_0">
-      <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,6">
+      <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_2">
-         <item>
-          <widget class="ElaPushButton" name="pushButton">
-           <property name="text">
-            <string>选择视频</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="label">
-           <property name="text">
-            <string>当前帧</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="ElaPlainTextEdit" name="plainTextEdit">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_img">
-         <property name="text">
-          <string/>
+        <widget class="QTabWidget" name="tabWidget">
+         <property name="currentIndex">
+          <number>0</number>
          </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="page_1">
-      <layout class="QVBoxLayout" name="verticalLayout_3">
-       <item>
-        <widget class="ElaPlainTextEdit" name="plainTextEdit_2">
-         <property name="plainText">
-          <string>[Script Info]
+         <widget class="QWidget" name="tab">
+          <attribute name="title">
+           <string>处理</string>
+          </attribute>
+          <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="0,10">
+           <item>
+            <layout class="QVBoxLayout" name="verticalLayout_2">
+             <item>
+              <widget class="ElaPushButton" name="pushButton">
+               <property name="text">
+                <string>选择视频</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label">
+               <property name="text">
+                <string>当前帧</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="ElaPlainTextEdit" name="plainTextEdit">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="ElaProgressBar" name="progressBar">
+               <property name="value">
+                <number>0</number>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_img">
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="tab_2">
+          <attribute name="title">
+           <string>输出</string>
+          </attribute>
+          <layout class="QVBoxLayout" name="verticalLayout_3">
+           <item>
+            <widget class="ElaPlainTextEdit" name="plainTextEdit_2">
+             <property name="plainText">
+              <string>[Script Info]
 Title: Zaochen
 Original Script: 
 ScriptType: v4.00+
@@ -102,7 +122,32 @@ Style: R2L,Microsoft YaHei UI,20,&amp;H66FFFFFF,&amp;H66FFFFFF,&amp;H66000000,&a
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text</string>
-         </property>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_3">
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="ElaPushButton" name="pushButton_back">
+               <property name="text">
+                <string>返回</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="ElaPushButton" name="pushButton_output">
+               <property name="text">
+                <string>导出</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
         </widget>
        </item>
       </layout>
@@ -175,7 +220,7 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text<
   <customwidget>
    <class>ElaPushButton</class>
    <extends>QPushButton</extends>
-   <header>elapushbutton.h</header>
+   <header location="global">elapushbutton.h</header>
   </customwidget>
   <customwidget>
    <class>ElaPlainTextEdit</class>
@@ -191,6 +236,11 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text<
    <class>ElaTreeView</class>
    <extends>QTreeView</extends>
    <header location="global">elatreeview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ElaProgressBar</class>
+   <extends>QProgressBar</extends>
+   <header location="global">elaprogressbar.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

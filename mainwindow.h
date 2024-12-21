@@ -32,6 +32,8 @@ private slots:
     void on_lineEdit_apikey_textChanged(const QString &arg1);
     void on_lineEdit_prompt_textChanged(const QString &arg1);
 
+    //void on_pushButton_back_clicked();
+
 private:
     Ui::MainWindow *ui;
     QEventLoop loop;
